@@ -24,7 +24,7 @@
             text-align: center;
         }
 
-        /* Floating Hearts Background */
+        /* القلوب العائمة */
         .heart-bg {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -44,65 +44,63 @@
             100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Main Card */
+        /* البطاقة الرئيسية */
         .container {
             background: white;
-            padding: 2.5rem;
-            border-radius: 35px;
-            box-shadow: 0 15px 35px rgba(251, 111, 146, 0.2);
+            padding: 3rem;
+            border-radius: 40px;
+            box-shadow: 0 15px 40px rgba(251, 111, 146, 0.2);
             z-index: 10;
             max-width: 85%;
             width: 380px;
-            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
         }
 
         .bear-container {
-            font-size: 90px;
-            margin-bottom: 15px;
-            display: block;
+            font-size: 100px;
+            margin-bottom: 20px;
+            transition: transform 0.5s ease;
         }
 
         h1 {
             color: var(--dark-pink);
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             margin-bottom: 2rem;
-            transition: opacity 0.3s;
         }
 
         .buttons {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 25px;
             height: 60px;
-            position: relative;
         }
 
-        /* Buttons */
+        /* تصميم الأزرار */
         #yesBtn {
             background: linear-gradient(45deg, #ffafcc, #fb6f92);
             color: white; border: none;
-            padding: 12px 35px; border-radius: 50px;
-            font-size: 1.2rem; font-weight: bold;
+            padding: 15px 40px; border-radius: 50px;
+            font-size: 1.3rem; font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(251, 111, 146, 0.4);
-            transition: transform 0.2s;
+            box-shadow: 0 5px 15px rgba(251, 111, 146, 0.4);
+            transition: 0.3s;
         }
 
         #noBtn {
             background: transparent;
             color: var(--dark-pink);
             border: 2px solid var(--dark-pink);
-            padding: 10px 30px; border-radius: 50px;
+            padding: 12px 35px; border-radius: 50px;
             font-size: 1.1rem; cursor: pointer;
-            transition: all 0.2s ease;
+            transition: 0.2s;
         }
 
-        /* Result View */
+        /* رسالة الحب */
         #message {
             display: none;
             color: var(--dark-pink);
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-weight: bold;
             animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -116,7 +114,7 @@
 <body>
 
     <audio id="bgMusic" loop>
-        <source src="https://www.chosic.com/wp-content/uploads/2021/07/Rainy-Day-Background-Music.mp3" type="audio/mpeg">
+        <source src="https://files.catbox.moe/6f3v8r.mp3" type="audio/mpeg">
     </audio>
 
     <div class="heart-bg" id="heartBg"></div>
@@ -143,19 +141,19 @@
         const music = document.getElementById('bgMusic');
         const icon = document.getElementById('icon');
 
-        // إنشاء قلوب عشوائية
+        // إنشاء القلوب
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 3 + 3 + 's';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
             heartBg.appendChild(heart);
-            setTimeout(() => heart.remove(), 6000);
+            setTimeout(() => heart.remove(), 5000);
         }
-        setInterval(createHeart, 500);
+        setInterval(createHeart, 400);
 
-        // هروب زر "لا"
+        // هروب زر "La"
         noBtn.addEventListener('mouseover', () => {
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
@@ -164,22 +162,23 @@
             noBtn.style.top = y + 'px';
         });
 
-        // الضغط على "نعم"
+        // الضغط على "Ah"
         yesBtn.addEventListener('click', () => {
-            // محو السؤال والبطونات
-            questionText.style.display = 'none';
-            btnGroup.style.display = 'none';
+            // حذف السؤال والأزرار تماماً
+            questionText.remove();
+            btnGroup.remove();
             
             // إظهار الميساج وتغيير الأيقونة
             message.style.display = 'block';
-            icon.innerHTML = '💖';
+            icon.innerHTML = '💍'; 
+            icon.style.transform = 'scale(1.2)';
             
-            // تشغيل الموسيقى (كتحتاج تفاعل من المستخدم باش تخدم)
+            // تشغيل أغنية Vechera
             music.play();
 
-            // شلال ديال القلوب
-            for(let i=0; i<40; i++) {
-                setTimeout(createHeart, i * 60);
+            // شلال كثيف من القلوب
+            for(let i=0; i<50; i++) {
+                setTimeout(createHeart, i * 50);
             }
         });
     </script>
