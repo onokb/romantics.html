@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wach Katbghini?</title>
+    <title>Wach Katbghini? ❤️</title>
     <style>
         :root {
             --primary-pink: #ffafcc;
@@ -27,12 +27,8 @@
         /* Floating Hearts Background */
         .heart-bg {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
         }
 
         .heart {
@@ -51,24 +47,26 @@
         /* Main Card */
         .container {
             background: white;
-            padding: 2rem;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(251, 111, 146, 0.2);
+            padding: 2.5rem;
+            border-radius: 35px;
+            box-shadow: 0 15px 35px rgba(251, 111, 146, 0.2);
             z-index: 10;
-            max-width: 90%;
-            width: 400px;
-            transition: all 0.5s ease;
+            max-width: 85%;
+            width: 380px;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .bear-container {
-            font-size: 80px;
-            margin-bottom: 1rem;
+            font-size: 90px;
+            margin-bottom: 15px;
+            display: block;
         }
 
         h1 {
             color: var(--dark-pink);
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin-bottom: 2rem;
+            transition: opacity 0.3s;
         }
 
         .buttons {
@@ -77,61 +75,55 @@
             align-items: center;
             gap: 20px;
             height: 60px;
+            position: relative;
         }
 
-        /* Button Styling */
+        /* Buttons */
         #yesBtn {
             background: linear-gradient(45deg, #ffafcc, #fb6f92);
-            color: white;
-            border: none;
-            padding: 12px 35px;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: bold;
+            color: white; border: none;
+            padding: 12px 35px; border-radius: 50px;
+            font-size: 1.2rem; font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(251, 111, 146, 0.4);
             transition: transform 0.2s;
-        }
-
-        #yesBtn:hover {
-            transform: scale(1.1);
         }
 
         #noBtn {
             background: transparent;
             color: var(--dark-pink);
             border: 2px solid var(--dark-pink);
-            padding: 10px 30px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            position: relative;
+            padding: 10px 30px; border-radius: 50px;
+            font-size: 1.1rem; cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        /* Success Message */
+        /* Result View */
         #message {
             display: none;
             color: var(--dark-pink);
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: bold;
-            margin-top: 20px;
-            animation: fadeIn 1s;
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
 <body>
 
+    <audio id="bgMusic" loop>
+        <source src="https://www.chosic.com/wp-content/uploads/2021/07/Rainy-Day-Background-Music.mp3" type="audio/mpeg">
+    </audio>
+
     <div class="heart-bg" id="heartBg"></div>
 
     <div class="container" id="mainContainer">
-        <div class="bear-container">🧸</div>
-        <h1 id="question">Wach katbghini?</h1>
+        <div class="bear-container" id="icon">🧸</div>
+        <h1 id="questionText">Wach katbghini?</h1>
         
         <div class="buttons" id="btnGroup">
             <button id="yesBtn">Ah</button>
@@ -145,11 +137,13 @@
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
         const message = document.getElementById('message');
-        const question = document.getElementById('question');
+        const questionText = document.getElementById('questionText');
         const btnGroup = document.getElementById('btnGroup');
         const heartBg = document.getElementById('heartBg');
+        const music = document.getElementById('bgMusic');
+        const icon = document.getElementById('icon');
 
-        // Function to create floating hearts
+        // إنشاء قلوب عشوائية
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
@@ -157,32 +151,35 @@
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.animationDuration = Math.random() * 3 + 3 + 's';
             heartBg.appendChild(heart);
-
-            setTimeout(() => {
-                heart.remove();
-            }, 6000);
+            setTimeout(() => heart.remove(), 6000);
         }
-        setInterval(createHeart, 400);
+        setInterval(createHeart, 500);
 
-        // "La" button dodging logic
+        // هروب زر "لا"
         noBtn.addEventListener('mouseover', () => {
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-            
-            noBtn.style.position = 'absolute';
+            noBtn.style.position = 'fixed';
             noBtn.style.left = x + 'px';
             noBtn.style.top = y + 'px';
         });
 
-        // "Ah" button click logic
+        // الضغط على "نعم"
         yesBtn.addEventListener('click', () => {
-            question.style.display = 'none';
+            // محو السؤال والبطونات
+            questionText.style.display = 'none';
             btnGroup.style.display = 'none';
-            message.style.display = 'block';
             
-            // Shower of hearts effect
-            for(let i=0; i<20; i++) {
-                setTimeout(createHeart, i * 100);
+            // إظهار الميساج وتغيير الأيقونة
+            message.style.display = 'block';
+            icon.innerHTML = '💖';
+            
+            // تشغيل الموسيقى (كتحتاج تفاعل من المستخدم باش تخدم)
+            music.play();
+
+            // شلال ديال القلوب
+            for(let i=0; i<40; i++) {
+                setTimeout(createHeart, i * 60);
             }
         });
     </script>
