@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wach katbghini?</title>
+    <title>Wach Katbghini?</title>
     <style>
         :root {
-            --soft-pink: #ffdae0;
-            --deep-pink: #ff85a2;
-            --white: #ffffff;
+            --primary-pink: #ffafcc;
+            --dark-pink: #fb6f92;
+            --bg-soft: #fff0f3;
         }
 
         body {
@@ -18,17 +18,42 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: var(--soft-pink);
+            background-color: var(--bg-soft);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
             text-align: center;
         }
 
+        /* Floating Hearts Background */
+        .heart-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .heart {
+            position: absolute;
+            color: var(--primary-pink);
+            font-size: 20px;
+            animation: float 6s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Main Card */
         .container {
-            background: rgba(255, 255, 255, 0.8);
+            background: white;
             padding: 2rem;
             border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(255, 133, 162, 0.3);
+            box-shadow: 0 10px 30px rgba(251, 111, 146, 0.2);
             z-index: 10;
             max-width: 90%;
             width: 400px;
@@ -37,140 +62,129 @@
 
         .bear-container {
             font-size: 80px;
-            margin-bottom: 20px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            margin-bottom: 1rem;
         }
 
         h1 {
-            color: var(--deep-pink);
+            color: var(--dark-pink);
             font-size: 2rem;
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
         }
 
         .buttons {
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 20px;
-            position: relative;
-            height: 50px;
+            height: 60px;
         }
 
-        .btn {
-            padding: 12px 35px;
-            font-size: 1.1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            border: none;
-            transition: transform 0.2s, background 0.3s;
-            font-weight: bold;
-        }
-
-        #yes-btn {
-            background: linear-gradient(45deg, #ff85a2, #ffb3c1);
+        /* Button Styling */
+        #yesBtn {
+            background: linear-gradient(45deg, #ffafcc, #fb6f92);
             color: white;
-            box-shadow: 0 4px 15px rgba(255, 133, 162, 0.4);
+            border: none;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(251, 111, 146, 0.4);
+            transition: transform 0.2s;
         }
 
-        #yes-btn:hover {
+        #yesBtn:hover {
             transform: scale(1.1);
         }
 
-        #no-btn {
+        #noBtn {
             background: transparent;
-            color: var(--deep-pink);
-            border: 2px solid var(--deep-pink);
-            position: absolute;
-            left: 220px;
+            color: var(--dark-pink);
+            border: 2px solid var(--dark-pink);
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
         }
 
-        .heart {
-            position: absolute;
-            color: var(--deep-pink);
-            font-size: 20px;
-            user-select: none;
-            pointer-events: none;
-            animation: heartFloat 4s linear forwards;
-        }
-
-        @keyframes heartFloat {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
-        }
-
-        .success-msg {
+        /* Success Message */
+        #message {
             display: none;
-            color: var(--deep-pink);
+            color: var(--dark-pink);
             font-size: 1.5rem;
-            margin-top: 20px;
             font-weight: bold;
+            margin-top: 20px;
             animation: fadeIn 1s;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <div class="container" id="main-card">
+    <div class="heart-bg" id="heartBg"></div>
+
+    <div class="container" id="mainContainer">
         <div class="bear-container">🧸</div>
         <h1 id="question">Wach katbghini?</h1>
         
-        <div class="buttons" id="btn-group">
-            <button class="btn" id="yes-btn" onclick="sayYes()">Ah</button>
-            <button class="btn" id="no-btn" onmouseover="moveNo()">La</button>
+        <div class="buttons" id="btnGroup">
+            <button id="yesBtn">Ah</button>
+            <button id="noBtn">La</button>
         </div>
-        
-        <div class="success-msg" id="message">Ana tanbghik bzzaf❤️</div>
+
+        <div id="message">Ana tanbghik bzzaf ❤️</div>
     </div>
 
     <script>
-        // Create floating background hearts
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const message = document.getElementById('message');
+        const question = document.getElementById('question');
+        const btnGroup = document.getElementById('btnGroup');
+        const heartBg = document.getElementById('heartBg');
+
+        // Function to create floating hearts
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
-            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
-            document.body.appendChild(heart);
+            heart.style.animationDuration = Math.random() * 3 + 3 + 's';
+            heartBg.appendChild(heart);
 
             setTimeout(() => {
                 heart.remove();
-            }, 4000);
+            }, 6000);
         }
+        setInterval(createHeart, 400);
 
-        setInterval(createHeart, 300);
-
-        // Dodge logic for the "No" button
-        function moveNo() {
-            const btn = document.getElementById('no-btn');
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+        // "La" button dodging logic
+        noBtn.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
             
-            btn.style.position = 'fixed';
-            btn.style.left = x + 'px';
-            btn.style.top = y + 'px';
-        }
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        });
 
-        // Click logic for "Yes"
-        function sayYes() {
-            document.getElementById('btn-group').style.display = 'none';
-            document.getElementById('question').style.display = 'none';
-            document.getElementById('message').style.display = 'block';
+        // "Ah" button click logic
+        yesBtn.addEventListener('click', () => {
+            question.style.display = 'none';
+            btnGroup.style.display = 'none';
+            message.style.display = 'block';
             
-            // Extra heart burst
-            for(let i=0; i<30; i++) {
-                setTimeout(createHeart, i * 50);
+            // Shower of hearts effect
+            for(let i=0; i<20; i++) {
+                setTimeout(createHeart, i * 100);
             }
-        }
+        });
     </script>
 </body>
 </html>
